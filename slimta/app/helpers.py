@@ -37,7 +37,7 @@ from slimta.policy.forward import Forward
 from slimta.policy.split import RecipientSplit, RecipientDomainSplit
 from slimta.policy.spamassassin import SpamAssassin
 from slimta.policy.headers import AddDateHeader, AddMessageIdHeader, \
-    AddReceivedHeader
+    AddReceivedHeader, AddDKIMHeader
 
 from .lookup import load_lookup
 from .validation import ConfigValidationError
@@ -214,6 +214,10 @@ def add_queue_policies(queue, policy_options):
             queue.add_policy(AddMessageIdHeader(hostname))
         elif policy.type == 'add_received_header':
             queue.add_policy(AddReceivedHeader())
+        elif policy.type == 'add_dkim_header':
+            queue.add_policy(AddDKIMHeader(
+                dkim=policy.get('dkim', {}),
+            ))
         elif policy.type == 'recipient_split':
             queue.add_policy(RecipientSplit())
         elif policy.type == 'recipient_domain_split':
