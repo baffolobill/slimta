@@ -236,6 +236,10 @@ def add_queue_policies(queue, policy_options):
             queue.add_policy(forward)
         elif policy.type == 'spamassassin':
             queue.add_policy(_get_spamassassin_object(policy))
+        # Important! Must be last, after all modifications of headers and message. 
+        # Otherwise, signature will be invalid and email will not be delivered.
+        # You can test validity of signature by sending email on address, generated here: 
+        # https://wander.science/projects/email/dkimtest/
         elif policy.type == 'add_dkim_header':
             queue.add_policy(AddDKIMHeader(
                 dkim=policy.get('dkim', {}),
