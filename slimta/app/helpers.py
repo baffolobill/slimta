@@ -214,10 +214,6 @@ def add_queue_policies(queue, policy_options):
             queue.add_policy(AddMessageIdHeader(hostname))
         elif policy.type == 'add_received_header':
             queue.add_policy(AddReceivedHeader())
-        elif policy.type == 'add_dkim_header':
-            queue.add_policy(AddDKIMHeader(
-                dkim=policy.get('dkim', {}),
-            ))
         elif policy.type == 'recipient_split':
             queue.add_policy(RecipientSplit())
         elif policy.type == 'recipient_domain_split':
@@ -240,6 +236,10 @@ def add_queue_policies(queue, policy_options):
             queue.add_policy(forward)
         elif policy.type == 'spamassassin':
             queue.add_policy(_get_spamassassin_object(policy))
+        elif policy.type == 'add_dkim_header':
+            queue.add_policy(AddDKIMHeader(
+                dkim=policy.get('dkim', {}),
+            ))
 
 
 def fill_hostname_template(val):
